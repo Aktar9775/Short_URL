@@ -20,7 +20,7 @@ app.use(express.json())
 app.use('/url',urlRoute)
 app.use('/user',User);
 app.get('/', (req, res) => {
-  res.send(`✅ Server is running on PORT ${PORT}`);
+  res.json(`✅ Server is running on PORT ${PORT}`);
 });
 
 app.get('/:shortId',async(req,res)=>{
