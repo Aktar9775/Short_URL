@@ -8,7 +8,8 @@ const User = require('../models/user');
 
 const handleRegisterUser = async (req, res) => {
   const { name, email, password } = req.body;
-
+  console.log('✅ Register route hit');
+  console.log('Request body:', req.body);
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
