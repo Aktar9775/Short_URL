@@ -31,9 +31,16 @@ const handleRegisterUser = async (req, res) => {
 
     await sendEmail(
       user.email,
-     `Hi ${user.name} , to verify your account `,//headers
-     `This is your OTP: ${user.otp}`//body
+      `Complete Your Account Verification`, // Subject
+      `Hi ${user.name},\n\n` + 
+      `Thank you for registering with us! To complete your account verification, please use the One-Time Password (OTP) provided below:\n\n` + 
+      `Your OTP: ${user.otp}\n\n` + 
+      `Please enter this OTP within the next 10 minutes to verify your account and activate all features.\n\n` + 
+      `If you did not request this verification, please disregard this email.\n\n` + 
+      `Thank you,\n` + 
+      `[URL Shortener]`
     );
+    
 
     return res.status(201).json({ message: 'User registered. Please verify OTP.' });
   } catch (error) {

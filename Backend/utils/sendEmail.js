@@ -15,7 +15,7 @@ const sendEmail = async (to, subject, text) => {
     });
 
     const info = await transporter.sendMail({
-      from: '"URL Shortner" supportteam@gmail.com',
+      from: '"URL Shortner"',
       to,
       subject,
       text,

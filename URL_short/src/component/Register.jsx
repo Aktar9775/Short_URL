@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-
+import API_BASE_URL from '../config'; 
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
@@ -24,22 +24,19 @@ function Register() {
     setError('');
   };
 
-
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
   };
 
- 
+  // ✅ Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
- 
     if (!emailRegex.test(formData.email)) {
       setError('Invalid email format');
       return;
     }
 
-  
     if (!passwordRegex.test(formData.password)) {
       setError(
         'Password must be at least 8 characters long, with one uppercase, one lowercase, one number, and one special character'
@@ -48,8 +45,7 @@ function Register() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8002/user/register', formData);
-
+      const response = await axios.post(`${API_BASE_URL}/user/register`, formData);
       alert('An OTP has been sent to your email. Please verify to continue.');
       setIsVerifying(true);
     } catch (error) {
@@ -62,7 +58,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8002/user/verify-otp', {
+      const response = await axios.post(`${API_BASE_URL}/user/verify-otp`, {
         email: formData.email,
         otp
       });
@@ -87,7 +83,6 @@ function Register() {
         {/* ✅ OTP Verification Form */}
         {isVerifying ? (
           <form onSubmit={handleVerifyOtp} className="space-y-5">
-            {/* OTP Input */}
             <div>
               <label className="block mb-1 text-gray-600 font-medium">Enter OTP</label>
               <input
@@ -99,7 +94,6 @@ function Register() {
               />
             </div>
 
-            {/* ✅ Verify Button */}
             <button
               type="submit"
               className="w-full bg-green-500 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-600 transition duration-300"
@@ -110,7 +104,6 @@ function Register() {
         ) : (
           // ✅ Registration Form
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name Input */}
             <div>
               <label className="block mb-1 text-gray-600 font-medium">Full Name</label>
               <input
@@ -124,7 +117,6 @@ function Register() {
               />
             </div>
 
-            {/* Email Input */}
             <div>
               <label className="block mb-1 text-gray-600 font-medium">Email Address</label>
               <input
@@ -138,7 +130,6 @@ function Register() {
               />
             </div>
 
-            {/* Password Input */}
             <div>
               <label className="block mb-1 text-gray-600 font-medium">Password</label>
               <input
@@ -150,8 +141,6 @@ function Register() {
                 className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               />
-
-        
               <ul className="mt-2 text-gray-500 text-sm list-disc pl-4">
                 <li>✅ At least 8 characters</li>
                 <li>✅ At least one uppercase letter</li>
@@ -161,14 +150,8 @@ function Register() {
               </ul>
             </div>
 
-            {/* ✅ Error Message */}
-            {error && (
-              <p className="text-red-500 text-sm mt-1">
-                {error}
-              </p>
-            )}
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
 
-            {/* ✅ Submit Button */}
             <button
               type="submit"
               className="w-full bg-blue-900 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-800 transition duration-300"
@@ -178,7 +161,6 @@ function Register() {
           </form>
         )}
 
-        {/* ✅ Already have an account */}
         {!isVerifying && (
           <p className="mt-6 text-center text-gray-600">
             Already have an account?{' '}

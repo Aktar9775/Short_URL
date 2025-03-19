@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../config'
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -14,11 +15,11 @@ function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Email and Password Regex
+  // ✅ Email and Password Regex
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!*]).{8,}$/;
 
-  // Handle Input Change
+  // ✅ Handle Input Change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -27,7 +28,7 @@ function Login() {
     setError('');
   };
 
-  // Handle Form Submission
+  // ✅ Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -44,14 +45,13 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8002/user/login', formData);
+      const response = await axios.post(`${API_BASE_URL}/user/login`, formData);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('token', response.data.token);
 
-      navigate('/shorten');
+      navigate('/shorten'); // ✅ Redirect after successful login
     } catch (error) {
-      console.error('Login Error:', error.response?.data);
       setError(error.response?.data?.message || 'Login failed');
     }
   };
@@ -64,33 +64,33 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8002/user/forgot-password', {
+      const response = await axios.post(`${API_BASE_URL}/user/forgot-password`, {
         email: formData.email,
       });
 
       alert(response.data.message);
-      setShowOtpModal(true); // Open OTP modal
+      setShowOtpModal(true);
     } catch (error) {
       setError(error.response?.data?.message || 'Failed to send OTP');
     }
   };
 
-  // ✅ Handle OTP Verification and Password Reset
+  // ✅ Handle OTP Verification
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post('http://localhost:8002/user/verify-otp', {
+      const response = await axios.post(`${API_BASE_URL}/user/verify-otp`, {
         email: formData.email,
         otp,
       });
 
       alert(response.data.message);
-      setResetPassword(true); // Allow password reset after OTP verification
+      setResetPassword(true);
     } catch (error) {
       setError(error.response?.data?.message || 'Invalid OTP');
     }
   };
 
-  // ✅ Handle New Password Submission
+  // ✅ Handle Password Reset
   const handleResetPassword = async () => {
     if (!passwordRegex.test(newPassword)) {
       setError(
@@ -100,7 +100,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8002/user/reset-password', {
+      const response = await axios.post(`${API_BASE_URL}/user/reset-password`, {
         email: formData.email,
         newPassword,
       });
@@ -119,7 +119,7 @@ function Login() {
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-900">Sign In</h2>
 
-        {/* Form */}
+        {/* ✅ Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
@@ -147,7 +147,6 @@ function Login() {
               className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
-            {/* Forgot Password Link */}
             <p
               className="text-right text-sm text-blue-500 cursor-pointer mt-1 hover:underline"
               onClick={handleForgotPassword}
@@ -156,10 +155,10 @@ function Login() {
             </p>
           </div>
 
-          {/* Error Message */}
+          {/* ✅ Error Message */}
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          {/* Submit Button */}
+          {/* ✅ Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-900 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-800 transition duration-300"
@@ -168,7 +167,7 @@ function Login() {
           </button>
         </form>
 
-        {/* Register Link */}
+        {/* ✅ Register Link */}
         <p className="mt-6 text-center text-gray-600">
           Don't have an account?{' '}
           <a href="/register" className="text-blue-500 hover:underline">
@@ -177,7 +176,7 @@ function Login() {
         </p>
       </div>
 
-      {/* ✅ OTP Verification Modal */}
+      {/* ✅ OTP Modal */}
       {showOtpModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm">
