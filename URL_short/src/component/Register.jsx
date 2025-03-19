@@ -51,6 +51,7 @@ function Register() {
                                       headers: { 'Content-Type': 'application/json' },
                                       }
                                        );
+      console.log(formData);
       alert('An OTP has been sent to your email. Please verify to continue.');
       setIsVerifying(true);
     } catch (error) {
