@@ -19,6 +19,9 @@ app.use(express.json())
 
 app.use('/url',urlRoute)
 app.use('/user',User);
+app.get('/', (req, res) => {
+  res.send(`✅ Server is running on PORT ${PORT}`);
+});
 
 app.get('/:shortId',async(req,res)=>{
   const shortId=req.params.shortId;
