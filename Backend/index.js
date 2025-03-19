@@ -22,7 +22,7 @@ app.use('/user',User);
 app.get('/', (req, res) => {
   res.json(`✅ Server is running on PORT ${PORT}`);
 });
-
+app.get('/favicon.ico', (req, res) => res.status(204));
 app.get('/:shortId',async(req,res)=>{
   const shortId=req.params.shortId;
   const entry=await URL.findOneAndUpdate({
