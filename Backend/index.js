@@ -16,6 +16,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true  // Allowed headers
 }));
+app.options('*', cors()); 
 app.use(express.json())
 
 app.use('/url',urlRoute)
