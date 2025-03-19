@@ -45,7 +45,12 @@ function Register() {
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/user/register`, formData);
+      const response = await axios.post(`${API_BASE_URL}/user/register`, formData,
+                                       {
+                                      withCredentials: true,
+                                      headers: { 'Content-Type': 'application/json' },
+                                      }
+                                       );
       alert('An OTP has been sent to your email. Please verify to continue.');
       setIsVerifying(true);
     } catch (error) {
