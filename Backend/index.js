@@ -1,11 +1,13 @@
+require("dotenv").config();
 const express= require('express');
 const cors= require('cors')
 const urlRoute=require('./routes/url')
 const User=require('./routes/auth')
 const URL = require('./models/url')
 const {connectMongoDB}=require('./connect')
+const MONGO_URL=process.env.MONGO_URL
 const app=express();
-connectMongoDB('mongodb://localhost:27017/short-url').then(()=>{
+connectMongoDB(MONGO_URL).then(()=>{
   console.log('Server running');
 })
 app.use(cors({
@@ -33,8 +35,5 @@ app.get('/:shortId',async(req,res)=>{
     res.redirect(entry.redirectURL)
 })
 
-
-
-
-const PORT=8002;
+const PORT=process.env.PORT;
 app.listen(PORT)

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import API_BASE_URL from '../config';
+
+import API_BASE_URL from '../config'; 
 
 function UrlList() {
   const [urls, setUrls] = useState([]);
@@ -24,6 +25,8 @@ function UrlList() {
   const fetchUrls = async () => {
     try {
       const token = localStorage.getItem('token');
+ 
+      
       if (!token) {
         alert('You are not logged in. Please log in again.');
         navigate('/login');
@@ -45,7 +48,10 @@ function UrlList() {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this URL?')) {
       try {
-        await axios.delete(`${API_BASE_URL}/url/${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`${API_BASE_URL}/url/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         alert('URL deleted successfully!');
         fetchUrls();
       } catch (error) {
@@ -59,7 +65,7 @@ function UrlList() {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const eventSource = new EventSource(`${API_BASE_URL}/url/updates?token=${token}`);
+    const eventSource = new EventSource(`${API_BASE_URL}/url/updates?token=${encodeURIComponent(token)}`);
     eventSource.onmessage = (event) => {
       const updatedUrls = JSON.parse(event.data);
       setUrls(updatedUrls);
@@ -70,7 +76,7 @@ function UrlList() {
       eventSource.close();
     };
 
-    return () => eventSource.close();
+    return () => eventSource.close(); // ✅ Cleanup on unmount
   };
 
   const handleChange = (e) => {
@@ -85,7 +91,9 @@ function UrlList() {
     }
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
+ 
+      
+      await axios.post(
         `${API_BASE_URL}/url`,
         { url: formData.redirectURL },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -94,13 +102,14 @@ function UrlList() {
       fetchUrls();
     } catch (error) {
       console.error('POST Error:', error.response?.data);
+      alert('Failed to shorten URL');
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    navigate('/');
+    navigate('/login');
   };
 
   const filteredUrls = urls.filter((url) =>

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (to, subject, text) => {
@@ -6,8 +7,8 @@ const sendEmail = async (to, subject, text) => {
      host:'smtp.gmail.com',
      port:'465',
       auth: {
-        user: 'sohelaktar9775@gmail.com',
-        pass: 'xvko ackp mgjt mcwi'
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
       },
       tls: {
         rejectUnauthorized: false
