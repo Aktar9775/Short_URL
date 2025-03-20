@@ -10,13 +10,13 @@ const app=express();
 connectMongoDB(MONGO_URL).then(()=>{
   console.log('Server running');
 })
-app.use(cors({
-  origin: 'https://urlshortener-ebon.vercel.app', // Allow frontend domain
-  methods: 'GET,POST,PUT,DELETE,OPTIONS', // Include OPTIONS for preflight requests
-  allowedHeaders: 'Content-Type, Authorization',
-  credentials: true  // Allowed headers
-}));
-app.options('*', cors()); 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://urlshortener-ebon.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 app.use(express.json())
 
 app.use('/url',urlRoute)
@@ -24,7 +24,7 @@ app.use('/user',User);
 app.get('/', (req, res) => {
   res.json(`✅ Server is running on PORT ${PORT}`);
 });
-app.get('/favicon.ico', (req, res) => res.status(204));
+
 app.get('/:shortId',async(req,res)=>{
   const shortId=req.params.shortId;
   const entry=await URL.findOneAndUpdate({
