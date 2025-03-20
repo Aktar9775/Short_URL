@@ -18,7 +18,9 @@ connectMongoDB(MONGO_URL).then(() => {
 app.use(cors({
   origin: 'https://urlshortener-ebon.vercel.app',
   methods: 'GET, POST, PUT, DELETE',
-  allowedHeaders: 'Content-Type, Authorization'
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
 }));
 
 app.use(express.json());
