@@ -11,9 +11,9 @@ connectMongoDB(MONGO_URL).then(()=>{
   console.log('Server running');
 })
 app.use(cors({
-  origin: ['https://urlshortener-ebon.vercel.app'], // Allow frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS for preflight requests
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: 'https://urlshortener-ebon.vercel.app', // Allow frontend domain
+  methods: 'GET,POST,PUT,DELETE,OPTIONS', // Include OPTIONS for preflight requests
+  allowedHeaders: 'Content-Type, Authorization',
   credentials: true  // Allowed headers
 }));
 app.options('*', cors()); 
