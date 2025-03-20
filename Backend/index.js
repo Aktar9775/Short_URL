@@ -18,9 +18,8 @@ connectMongoDB(MONGO_URL).then(() => {
 // 🔹 CORS Middleware Function
 const allowCors = (req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Consider using a specific origin
+  res.setHeader('Access-Control-Allow-Origin', 'https://urlshortener-ebon.vercel.app'); // Consider using a specific origin
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, PATCH, DELETE, POST, PUT');
-   res.setHeader('Access-Control-Allow-Credentials', 'true'); // Required if using cookies or authentication
   
   res.setHeader(
     'Access-Control-Allow-Headers',
