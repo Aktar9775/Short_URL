@@ -15,12 +15,31 @@ connectMongoDB(MONGO_URL).then(() => {
   console.log('✅ Server running');
 });
 
+// 🔹 CORS Middleware Function
+const allowCors = (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Consider using a specific origin
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS, PATCH, DELETE, POST, PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+};
+
+// 🔹 Apply the `allowCors` Middleware
+app.use(allowCors);
+
 app.use(cors({
   origin: 'https://urlshortener-ebon.vercel.app',
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization',
-  credentials:true,            //access-control-allow-credentials:true
-  optionSuccessStatus:200
+  credentials: true, // access-control-allow-credentials:true
+  optionSuccessStatus: 200
 }));
 
 app.use(express.json());
